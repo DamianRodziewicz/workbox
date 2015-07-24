@@ -89,3 +89,16 @@ This command will launch a prebuilt version of Electron with the current project
 - Run `grunt serve` on a separate terminal tab (or command prompt) to build the project and start watching files automatically
 - Run `npm run win` or `npm run osx` on a separate terminal tab (or command prompt) to run Electron with the current project
 - Start changing or adding the code, it will be automatically rebuilt on background and your Electron window will reload once rebuilding is complete
+
+
+
+
+
+## Build
+bower install
+npm install
+https://www.npmjs.com/package/electron-packager
+electron-packager . workbox --platform=linux --arch=x64 --version=0.26.1 --overwrite
+electron-packager . workbox --platform=win32 --arch=x64 --version=0.26.1 --overwrite
+electron-packager . workbox --platform=darwin --arch=x64 --version=0.26.1 --overwrite
+
