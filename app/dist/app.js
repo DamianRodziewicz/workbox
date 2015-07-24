@@ -37,7 +37,7 @@ var App = _react2['default'].createClass({
   getInitialState: function getInitialState() {
     return {
       show: "welcome",
-      items: [{ icon: "google", name: "Google Apps", isActive: true, url: "https://mail.google.com" }, { icon: "slack", name: "Slack", isActive: true, url: "https://slack.com/signin" }, { icon: "github", name: "Github", isActive: true, url: "https://www.github.com" }, { icon: "hacker news", name: "Hacker News", isActive: true, url: "https://news.ycombinator.com/news" }, { icon: "hacker news", name: "test", isActive: false, url: "https://news.ycombinator.com/news" }]
+      items: [{ icon: "google", name: "Google Apps", isActive: true, url: "https://mail.google.com" }, { icon: "slack", name: "Slack", isActive: true, url: "https://slack.com/signin" }, { icon: "github", name: "Github", isActive: true, url: "https://www.github.com" }, { icon: "hacker news", name: "Hacker News", isActive: true, url: "https://news.ycombinator.com/news" }, { icon: "bitbucket", name: "Bitbucket", isActive: false, url: "https://bitbucket.org/" }, { icon: "twitter", name: "Twitter", isActive: false, url: "https://twitter.com/" }, { icon: "trello", name: "Trello", isActive: false, url: "https://twitter.com/" }, { icon: "slideshare", name: "Slideshare", isActive: false, url: "https://twitter.com/" }, { icon: "linkedin", name: "Linkedin", isActive: false, url: "https://www.linkedin.com/" }, { icon: "dropbox", name: "Dropbox", isActive: false, url: "https://www.dropbox.com" }]
     };
   },
 
@@ -119,6 +119,7 @@ var App = _react2['default'].createClass({
       activeClasses += "ui basic green button";
       var nonactiveClasses = menuItem.isActive ? "" : "active ";
       nonactiveClasses += "ui basic red button";
+      var iconClasses = menuItem.icon + " large icon right floated";
       return _react2['default'].createElement(
         'div',
         { className: "column" },
@@ -128,7 +129,7 @@ var App = _react2['default'].createClass({
           _react2['default'].createElement(
             'div',
             { className: "content" },
-            _react2['default'].createElement('i', { className: "google large icon right floated " }),
+            _react2['default'].createElement('i', { className: iconClasses }),
             _react2['default'].createElement(
               'div',
               { className: "header" },
