@@ -176,13 +176,17 @@ var App = _react2['default'].createClass({
       null,
       _react2['default'].createElement(
         'h3',
-        { className: "ui center aligned header" },
+        { className: "ui center aligned header", style: { marginTop: "20px" } },
         'Pick your focus zone.'
       ),
       _react2['default'].createElement(
         'div',
-        { className: "ui three column doubling stackable grid container" },
-        settingsItems
+        { className: "ui container" },
+        _react2['default'].createElement(
+          'div',
+          { className: "ui three column stackable grid" },
+          settingsItems
+        )
       )
     );
     var content = this.state.show === "welcome" ? welcome : this.state.show === "settings" ? settings : webview;
