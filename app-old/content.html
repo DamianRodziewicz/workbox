@@ -4,12 +4,8 @@
     <title>Workbox</title>
   </head>
   <body>
-  <link rel="stylesheet" type="text/css" href="bower_components/semantic-ui/dist/semantic.min.css">
   <script type="text/javascript">
 
-    function setSrcTo(url) {
-      document.getElementById("pageFrame").src = url;
-    }
     $(document).ready(function() {
       document.getElementById("pageFrame").src = "./welcome.html";
 
@@ -18,38 +14,5 @@
       });
     });
   </script>
-    <div class="ui fixed menu">
-      <div class="ui container">
-        <div href="#" class="header item">
-          <i class="cube large icon"></i> Workbox
-        </div>
-
-        <a href="#" class="item" onClick="setSrcTo('https://www.gmail.com')">
-          <i class="google large icon popup" data-content="Gmail"></i>
-        </a>
-        <a href="#" class="item" onClick="setSrcTo('https://slack.com/signin')">
-          <i class="slack large icon popup" data-content="Slack"></i>
-        </a>
-        <a href="#" class="item" onClick="setSrcTo('https://www.github.com')">
-          <i class="github large icon popup" data-content="Github"></i>
-        </a>
-        <a href="#" class="item" onClick="setSrcTo('https://news.ycombinator.com/news')">
-          <i class="hacker news large icon popup" data-content="Hacker news"></i>
-        </a>
-
-        <a href="#" class="ui right floated item" onClick="setSrcTo('./settings.html')">
-          <i class="settings large icon popup"></i> Settings
-        </a>
-      </div>
-    </div>
-
-    <div style="width:100%; height: 100%; padding-top:47px">
-      <webview
-          id="pageFrame"
-          sandbox="allow-forms allow-popups allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"
-          width="100%"
-          height="100%">
-      </webview>
-    </div>
   </body>
 </html>
