@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Workbox</title>
+  </head>
+
+  <body style="width:100%; height: 100%">
+    <link rel="stylesheet" type="text/css" href="bower_components/semantic-ui/dist/semantic.min.css">
+    <div style="height:30%; width:100%"></div>
+    <h3 class="ui center aligned header">
+      <div class="ui info message">
+          <div id="quote" class="header"></div>
+      </div>
+    </h3>
+  </body>
+
+  <script>
+    var quotes=[
+      "Live life to the fullest, and focus on the positive.",
+      "For me the greatest beauty always lies in the greatest clarity.",
+      "You can't depend on your eyes when your imagination is out of focus.",
+      "I don't focus on what I'm up against. I focus on my goals and I try to ignore the rest.",
+      "I focus on one thing and one thing only.",
+    ];
+    var quote = quotes[Math.floor(Math.random()*5)%5];
+    document.getElementById("quote").innerHTML = quote;
+  </script>
+</html>
