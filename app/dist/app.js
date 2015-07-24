@@ -34,15 +34,29 @@ var App = _react2['default'].createClass({
 
   mixins: [_reactRouter.Navigation],
 
+  getInitialState: function getInitialState() {
+    return {
+      show: "welcome",
+      items: [{ icon: "google", url: "https://mail.google.com" }, { icon: "slack", url: "https://slack.com/signin" }, { icon: "github", url: "https://www.github.com" }, { icon: "hacker news", url: "https://news.ycombinator.com/news" }]
+    };
+  },
+
   componentDidMount: function componentDidMount() {
     var ipc = window.require('ipc');
     ipc.on('transitionTo', (function (routeName) {
-      //this.transitionTo(routeName, { the: 'params' }, { the: 'query' });
       this.transitionTo(routeName);
     }).bind(this));
   },
 
+  setSrcTo: function setSrcTo(url) {
+    var newState = this.state;
+    newState.show = url;
+    this.setState(newState);
+  },
+
   render: function render() {
+    var _this = this;
+
     var links = _navbar.map(function (r) {
       return _react2['default'].createElement(
         _reactRouterBootstrap.NavItemLink,
@@ -50,9 +64,110 @@ var App = _react2['default'].createClass({
         r.text
       );
     });
-    function setSrcTo(url) {
-      document.getElementById("pageFrame").src = url;
-    }
+    $(document).ready(function () {
+      $('.popup').popup({
+        position: "bottom left"
+      });
+    });
+    var menu = this.state.items.map(function (menuItem, index) {
+      var classString = menuItem.icon + " large icon popup";
+      return _react2['default'].createElement(
+        'a',
+        { key: index, href: "#", className: "item", onClick: function () {
+            return _this.setSrcTo(menuItem.url);
+          } },
+        _react2['default'].createElement('i', { className: classString, 'data-content': menuItem.url })
+      );
+    });
+    var webview = _react2['default'].createElement('webview', {
+      src: this.state.show,
+      id: "pageFrame",
+      sandbox: "allow-forms allow-popups allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation",
+      width: "100%",
+      height: "100%" });
+
+    var quotes = ["Live life to the fullest, and focus on the positive.", "For me the greatest beauty always lies in the greatest clarity.", "You can't depend on your eyes when your imagination is out of focus.", "I don't focus on what I'm up against. I focus on my goals and I try to ignore the rest.", "I focus on one thing and one thing only."];
+    var quote = quotes[Math.floor(Math.random() * 5) % 5];
+    var welcome = _react2['default'].createElement(
+      'div',
+      { style: { height: "100%", width: "100%" } },
+      _react2['default'].createElement('div', { style: { height: "30%", width: "100%" } }),
+      _react2['default'].createElement(
+        'h3',
+        { className: "ui center aligned header" },
+        _react2['default'].createElement(
+          'div',
+          { className: "ui info message" },
+          _react2['default'].createElement(
+            'div',
+            { className: "header" },
+            quote
+          )
+        )
+      )
+    );
+
+    var settings = _react2['default'].createElement(
+      'div',
+      null,
+      _react2['default'].createElement(
+        'h3',
+        { className: "ui center aligned header" },
+        'Pick your focus zone.'
+      ),
+      _react2['default'].createElement(
+        'div',
+        { className: "ui three column doubling stackable grid container" },
+        _react2['default'].createElement(
+          'div',
+          { className: "column" },
+          _react2['default'].createElement(
+            'div',
+            { className: "ui segment card" },
+            _react2['default'].createElement(
+              'div',
+              { className: "content" },
+              _react2['default'].createElement('i', { className: "google large icon right floated " }),
+              _react2['default'].createElement(
+                'div',
+                { className: "header" },
+                'Google Apps'
+              ),
+              _react2['default'].createElement(
+                'div',
+                { className: "meta" },
+                'Meta'
+              ),
+              _react2['default'].createElement(
+                'div',
+                { className: "description" },
+                'Long description'
+              )
+            ),
+            _react2['default'].createElement(
+              'div',
+              { className: "extra content" },
+              _react2['default'].createElement(
+                'div',
+                { className: "ui two buttons" },
+                _react2['default'].createElement(
+                  'div',
+                  { className: "ui basic green button" },
+                  'Active'
+                ),
+                _react2['default'].createElement(
+                  'div',
+                  { className: "ui basic red button" },
+                  'Non active'
+                )
+              )
+            )
+          )
+        )
+      )
+    );
+    var content = this.state.show === "welcome" ? welcome : this.state.show === "settings" ? settings : webview;
+
     return _react2['default'].createElement(
       'div',
       { style: {
@@ -71,38 +186,11 @@ var App = _react2['default'].createClass({
             _react2['default'].createElement('i', { className: "cube large icon" }),
             ' Workbox'
           ),
-          _react2['default'].createElement(
-            'a',
-            { href: "#", className: "item", onClick: function () {
-                return setSrcTo('https://www.gmail.com');
-              } },
-            _react2['default'].createElement('i', { className: "google large icon popup", 'data-content': "Gmail" })
-          ),
-          _react2['default'].createElement(
-            'a',
-            { href: "#", className: "item", onClick: function () {
-                return setSrcTo('https://slack.com/signin');
-              } },
-            _react2['default'].createElement('i', { className: "slack large icon popup", 'data-content': "Slack" })
-          ),
-          _react2['default'].createElement(
-            'a',
-            { href: "#", className: "item", onClick: function () {
-                return setSrcTo('https://www.github.com');
-              } },
-            _react2['default'].createElement('i', { className: "github large icon popup", 'data-content': "Github" })
-          ),
-          _react2['default'].createElement(
-            'a',
-            { href: "#", className: "item", onClick: function () {
-                return setSrcTo('https://news.ycombinator.com/news');
-              } },
-            _react2['default'].createElement('i', { className: "hacker news large icon popup", 'data-content': "Hacker news" })
-          ),
+          menu,
           _react2['default'].createElement(
             'a',
             { href: "#", className: "ui right floated item", onClick: function () {
-                return setSrcTo('./settings.html');
+                return _this.setSrcTo("settings");
               } },
             _react2['default'].createElement('i', { className: "settings large icon popup" }),
             ' Settings'
@@ -115,11 +203,7 @@ var App = _react2['default'].createClass({
             width: "100%",
             height: "100%"
           } },
-        _react2['default'].createElement('webview', {
-          id: "pageFrame",
-          sandbox: "allow-forms allow-popups allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation",
-          width: "100%",
-          height: "100%" })
+        content
       )
     );
   }

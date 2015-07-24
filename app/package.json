@@ -1,8 +1,8 @@
 {
-  "name": "electron-react",
-  "version": "0.2.0",
+  "name"    : "Workbox",
+  "version" : "0.1.0",
+  "main"    : "main.js",
   "description": "Project template for Electron with React support",
-  "main": "main.js",
   "scripts": {
     "win": "node_modules\\electron-prebuilt\\dist\\electron .",
     "osx": "node_modules/electron-prebuilt/dist/Electron.app/Contents/MacOS/Electron ."

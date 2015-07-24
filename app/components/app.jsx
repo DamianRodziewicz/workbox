@@ -20,12 +20,29 @@ var _navbar = runtime.routes.filter(function (r) {
 const App = React.createClass({
   mixins: [ Navigation ],
 
+  getInitialState: function() {
+    return {
+      show: "welcome",
+      items: [
+        {icon: "google", url: "https://mail.google.com"},
+        {icon: "slack", url: "https://slack.com/signin"},
+        {icon: "github", url: "https://www.github.com"},
+        {icon: "hacker news", url: "https://news.ycombinator.com/news"}
+      ]
+    }
+  },
+
   componentDidMount() {
     var ipc = window.require('ipc');
     ipc.on('transitionTo', function(routeName) {
-      //this.transitionTo(routeName, { the: 'params' }, { the: 'query' });
       this.transitionTo(routeName);
     }.bind(this));
+  },
+
+  setSrcTo(url) {
+    var newState = this.state;
+    newState.show = url;
+    this.setState(newState);
   },
 
   render() {
@@ -34,9 +51,74 @@ const App = React.createClass({
         <NavItemLink key={r.route} to={r.route}>{r.text}</NavItemLink>
       );
     });
-    function setSrcTo(url) {
-      document.getElementById("pageFrame").src = url;
-    }
+    $(document).ready(function() {
+      $('.popup').popup({
+          position: "bottom left"
+      });
+    });
+    var menu = this.state.items.map((menuItem, index) => {
+      var classString = menuItem.icon + " large icon popup";
+      return <a key={index} href="#" className="item" onClick={()=>this.setSrcTo(menuItem.url)}>
+        <i className={classString} data-content={menuItem.url}></i>
+      </a>;
+    });
+    var webview = <webview
+        src={this.state.show}
+        id="pageFrame"
+        sandbox="allow-forms allow-popups allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"
+        width="100%"
+        height="100%">
+    </webview>;
+
+    var quotes=[
+      "Live life to the fullest, and focus on the positive.",
+      "For me the greatest beauty always lies in the greatest clarity.",
+      "You can't depend on your eyes when your imagination is out of focus.",
+      "I don't focus on what I'm up against. I focus on my goals and I try to ignore the rest.",
+      "I focus on one thing and one thing only.",
+    ];
+    var quote = quotes[Math.floor(Math.random()*5)%5];
+    var welcome = <div style={{height:"100%", width:"100%"}}>
+      <div style={{height:"30%", width:"100%"}}></div>
+      <h3 className="ui center aligned header">
+        <div className="ui info message">
+            <div className="header">{quote}</div>
+        </div>
+      </h3>
+    </div>;
+
+    var settings = <div>
+      <h3 className="ui center aligned header">Pick your focus zone.</h3>
+
+      <div className="ui three column doubling stackable grid container">
+        <div className="column">
+          <div className="ui segment card">
+            <div className="content">
+              <i className="google large icon right floated "></i>
+              <div className="header">
+                Google Apps
+              </div>
+              <div className="meta">
+                Meta
+              </div>
+              <div className="description">
+                Long description
+              </div>
+            </div>
+            <div className="extra content">
+              <div className="ui two buttons">
+                <div className="ui basic green button">Active</div>
+                <div className="ui basic red button">Non active</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    ;
+    var content = (this.state.show === "welcome") ? welcome :
+                  (this.state.show === "settings") ? settings : webview;
+
     return (
       <div style={{
         width:"100%",
@@ -47,21 +129,8 @@ const App = React.createClass({
             <div href="#" className="header item">
               <i className="cube large icon"></i> Workbox
             </div>
-
-            <a href="#" className="item" onClick={()=>setSrcTo('https://www.gmail.com')}>
-              <i className="google large icon popup" data-content="Gmail"></i>
-            </a>
-            <a href="#" className="item" onClick={()=>setSrcTo('https://slack.com/signin')}>
-              <i className="slack large icon popup" data-content="Slack"></i>
-            </a>
-            <a href="#" className="item" onClick={()=>setSrcTo('https://www.github.com')}>
-              <i className="github large icon popup" data-content="Github"></i>
-            </a>
-            <a href="#" className="item" onClick={()=>setSrcTo('https://news.ycombinator.com/news')}>
-              <i className="hacker news large icon popup" data-content="Hacker news"></i>
-            </a>
-
-            <a href="#" className="ui right floated item" onClick={()=>setSrcTo('./settings.html')}>
+            {menu}
+            <a href="#" className="ui right floated item" onClick={()=>this.setSrcTo("settings")}>
               <i className="settings large icon popup"></i> Settings
             </a>
           </div>
@@ -71,12 +140,7 @@ const App = React.createClass({
           width:"100%",
           height: "100%"
         }}>
-          <webview
-              id="pageFrame"
-              sandbox="allow-forms allow-popups allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"
-              width="100%"
-              height="100%">
-          </webview>
+        {content}
         </div>
       </div>
     );
