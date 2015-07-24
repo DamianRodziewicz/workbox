@@ -37,7 +37,7 @@ var App = _react2['default'].createClass({
   getInitialState: function getInitialState() {
     return {
       show: "welcome",
-      items: [{ icon: "google", url: "https://mail.google.com" }, { icon: "slack", url: "https://slack.com/signin" }, { icon: "github", url: "https://www.github.com" }, { icon: "hacker news", url: "https://news.ycombinator.com/news" }]
+      items: [{ icon: "google", name: "Google Apps", isActive: true, url: "https://mail.google.com" }, { icon: "slack", name: "Slack", isActive: true, url: "https://slack.com/signin" }, { icon: "github", name: "Github", isActive: true, url: "https://www.github.com" }, { icon: "hacker news", name: "Hacker News", isActive: true, url: "https://news.ycombinator.com/news" }, { icon: "hacker news", name: "test", isActive: false, url: "https://news.ycombinator.com/news" }]
     };
   },
 
@@ -51,6 +51,11 @@ var App = _react2['default'].createClass({
   setSrcTo: function setSrcTo(url) {
     var newState = this.state;
     newState.show = url;
+    this.setState(newState);
+  },
+  setIsActive: function setIsActive(val, index) {
+    var newState = this.state;
+    newState.items[index].isActive = val;
     this.setState(newState);
   },
 
@@ -69,7 +74,9 @@ var App = _react2['default'].createClass({
         position: "bottom left"
       });
     });
-    var menu = this.state.items.map(function (menuItem, index) {
+    var menu = this.state.items.filter(function (menuItem) {
+      return menuItem.isActive;
+    }).map(function (menuItem, index) {
       var classString = menuItem.icon + " large icon popup";
       return _react2['default'].createElement(
         'a',
@@ -107,6 +114,62 @@ var App = _react2['default'].createClass({
       )
     );
 
+    var settingsItems = this.state.items.map(function (menuItem, index) {
+      var activeClasses = menuItem.isActive ? "active " : "";
+      activeClasses += "ui basic green button";
+      var nonactiveClasses = menuItem.isActive ? "" : "active ";
+      nonactiveClasses += "ui basic red button";
+      return _react2['default'].createElement(
+        'div',
+        { className: "column" },
+        _react2['default'].createElement(
+          'div',
+          { className: "ui segment card" },
+          _react2['default'].createElement(
+            'div',
+            { className: "content" },
+            _react2['default'].createElement('i', { className: "google large icon right floated " }),
+            _react2['default'].createElement(
+              'div',
+              { className: "header" },
+              menuItem.name
+            ),
+            _react2['default'].createElement(
+              'div',
+              { className: "meta" },
+              menuItem.name
+            ),
+            _react2['default'].createElement(
+              'div',
+              { className: "description" },
+              menuItem.url
+            )
+          ),
+          _react2['default'].createElement(
+            'div',
+            { className: "extra content" },
+            _react2['default'].createElement(
+              'div',
+              { className: "ui two buttons" },
+              _react2['default'].createElement(
+                'div',
+                { className: activeClasses, onClick: function () {
+                    return _this.setIsActive(true, index);
+                  } },
+                'Active'
+              ),
+              _react2['default'].createElement(
+                'div',
+                { className: nonactiveClasses, onClick: function () {
+                    return _this.setIsActive(false, index);
+                  } },
+                'Non active'
+              )
+            )
+          )
+        )
+      );
+    });
     var settings = _react2['default'].createElement(
       'div',
       null,
@@ -118,52 +181,7 @@ var App = _react2['default'].createClass({
       _react2['default'].createElement(
         'div',
         { className: "ui three column doubling stackable grid container" },
-        _react2['default'].createElement(
-          'div',
-          { className: "column" },
-          _react2['default'].createElement(
-            'div',
-            { className: "ui segment card" },
-            _react2['default'].createElement(
-              'div',
-              { className: "content" },
-              _react2['default'].createElement('i', { className: "google large icon right floated " }),
-              _react2['default'].createElement(
-                'div',
-                { className: "header" },
-                'Google Apps'
-              ),
-              _react2['default'].createElement(
-                'div',
-                { className: "meta" },
-                'Meta'
-              ),
-              _react2['default'].createElement(
-                'div',
-                { className: "description" },
-                'Long description'
-              )
-            ),
-            _react2['default'].createElement(
-              'div',
-              { className: "extra content" },
-              _react2['default'].createElement(
-                'div',
-                { className: "ui two buttons" },
-                _react2['default'].createElement(
-                  'div',
-                  { className: "ui basic green button" },
-                  'Active'
-                ),
-                _react2['default'].createElement(
-                  'div',
-                  { className: "ui basic red button" },
-                  'Non active'
-                )
-              )
-            )
-          )
-        )
+        settingsItems
       )
     );
     var content = this.state.show === "welcome" ? welcome : this.state.show === "settings" ? settings : webview;

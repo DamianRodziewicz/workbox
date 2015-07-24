@@ -24,10 +24,11 @@ const App = React.createClass({
     return {
       show: "welcome",
       items: [
-        {icon: "google", url: "https://mail.google.com"},
-        {icon: "slack", url: "https://slack.com/signin"},
-        {icon: "github", url: "https://www.github.com"},
-        {icon: "hacker news", url: "https://news.ycombinator.com/news"}
+        {icon: "google", name:"Google Apps", isActive:true, url: "https://mail.google.com"},
+        {icon: "slack", name:"Slack", isActive:true,  url: "https://slack.com/signin"},
+        {icon: "github", name:"Github", isActive:true,  url: "https://www.github.com"},
+        {icon: "hacker news", name:"Hacker News", isActive:true, url: "https://news.ycombinator.com/news"},
+        {icon: "hacker news", name:"test", isActive:false, url: "https://news.ycombinator.com/news"}
       ]
     }
   },
@@ -44,6 +45,11 @@ const App = React.createClass({
     newState.show = url;
     this.setState(newState);
   },
+  setIsActive(val, index) {
+    var newState = this.state;
+    newState.items[index].isActive = val;
+    this.setState(newState);
+  },
 
   render() {
     var links = _navbar.map(function (r) {
@@ -56,12 +62,14 @@ const App = React.createClass({
           position: "bottom left"
       });
     });
-    var menu = this.state.items.map((menuItem, index) => {
-      var classString = menuItem.icon + " large icon popup";
-      return <a key={index} href="#" className="item" onClick={()=>this.setSrcTo(menuItem.url)}>
-        <i className={classString} data-content={menuItem.url}></i>
-      </a>;
-    });
+    var menu = this.state.items
+      .filter((menuItem) => menuItem.isActive)
+      .map((menuItem, index) => {
+        var classString = menuItem.icon + " large icon popup";
+        return <a key={index} href="#" className="item" onClick={()=>this.setSrcTo(menuItem.url)}>
+          <i className={classString} data-content={menuItem.url}></i>
+        </a>;
+      });
     var webview = <webview
         src={this.state.show}
         id="pageFrame"
@@ -87,32 +95,40 @@ const App = React.createClass({
       </h3>
     </div>;
 
-    var settings = <div>
-      <h3 className="ui center aligned header">Pick your focus zone.</h3>
 
-      <div className="ui three column doubling stackable grid container">
-        <div className="column">
+
+    var settingsItems = this.state.items.map((menuItem, index) => {
+      var activeClasses = menuItem.isActive ? "active " : "";
+      activeClasses += "ui basic green button";
+      var nonactiveClasses = menuItem.isActive ? "": "active ";
+      nonactiveClasses += "ui basic red button";
+      return <div className="column">
           <div className="ui segment card">
             <div className="content">
               <i className="google large icon right floated "></i>
               <div className="header">
-                Google Apps
+                {menuItem.name}
               </div>
               <div className="meta">
-                Meta
+                {menuItem.name}
               </div>
               <div className="description">
-                Long description
+                {menuItem.url}
               </div>
             </div>
             <div className="extra content">
               <div className="ui two buttons">
-                <div className="ui basic green button">Active</div>
-                <div className="ui basic red button">Non active</div>
+                <div className={activeClasses} onClick={()=>this.setIsActive(true, index)}>Active</div>
+                <div className={nonactiveClasses} onClick={()=>this.setIsActive(false, index)}>Non active</div>
               </div>
             </div>
           </div>
         </div>
+    });
+    var settings = <div>
+      <h3 className="ui center aligned header">Pick your focus zone.</h3>
+      <div className="ui three column doubling stackable grid container">
+        {settingsItems}
       </div>
     </div>
     ;
