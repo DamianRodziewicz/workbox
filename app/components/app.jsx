@@ -132,9 +132,11 @@ const App = React.createClass({
         </div>
     });
     var settings = <div>
-      <h3 className="ui center aligned header">Pick your focus zone.</h3>
-      <div className="ui three column doubling stackable grid container">
-        {settingsItems}
+      <h3 className="ui center aligned header" style={{marginTop: "20px"}}>Pick your focus zone.</h3>
+      <div className="ui container">
+        <div className="ui three column stackable grid">
+          {settingsItems}
+        </div>
       </div>
     </div>
     ;
